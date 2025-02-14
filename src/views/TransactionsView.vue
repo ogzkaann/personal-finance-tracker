@@ -64,10 +64,6 @@ const closeTransactionForm = () => {
   showTransactionForm.value = false;
 };
 
-const handleAddTransaction = () => {
-  showTransactionForm.value = true;
-};
-
 const handleTransactionSubmit = (transaction: Omit<Transaction, 'id' | 'createdAt' | 'updatedAt'>) => {
   transactionStore.addTransaction(transaction);
   showTransactionForm.value = false;

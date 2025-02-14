@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import VueApexCharts from 'vue3-apexcharts';
 import type { Transaction } from '../types';
@@ -118,7 +118,7 @@ const chartOptions = computed(() => ({
     enabled: true,
     shared: true,
     intersect: false,
-    custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+    custom: function({ series, dataPointIndex, w }: any) {
       const date = w.globals.categoryLabels[dataPointIndex];
       const income = series[0][dataPointIndex];
       const expense = series[1][dataPointIndex];
@@ -143,29 +143,29 @@ const chartOptions = computed(() => ({
       const balanceSign = balance >= 0 ? '+' : '';
 
       return `
-        <div class="px-4 py-3 bg-white rounded-lg shadow-lg border border-gray-100">
-          <div class="text-sm font-medium text-gray-600 mb-3">${date}</div>
+        <div class="px-4 py-3 bg-white rounded-lg border border-gray-100 shadow-lg">
+          <div class="mb-3 text-sm font-medium text-gray-600">${date}</div>
           
           <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <div class="flex justify-between items-center">
+              <div class="flex gap-2 items-center">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
                 <div class="text-sm font-medium text-gray-900">${t('transactions.type.income')}</div>
               </div>
               <div class="text-sm font-semibold text-emerald-600">+${incomeFormatted}</div>
             </div>
             
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+            <div class="flex justify-between items-center">
+              <div class="flex gap-2 items-center">
+                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
                 <div class="text-sm font-medium text-gray-900">${t('transactions.type.expense')}</div>
               </div>
               <div class="text-sm font-semibold text-red-600">-${expenseFormatted}</div>
             </div>
             
             <div class="pt-2 mt-2 border-t border-gray-100">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
+              <div class="flex justify-between items-center">
+                <div class="flex gap-2 items-center">
                   <div class="w-2 h-2 rounded-full" style="background-color: ${balanceColor}"></div>
                   <div class="text-sm font-medium text-gray-900">${t('analytics.metrics.netBalance')}</div>
                 </div>

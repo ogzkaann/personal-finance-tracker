@@ -130,7 +130,7 @@ const chartOptions = computed(() => ({
   },
   tooltip: {
     enabled: true,
-    custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+    custom: function({ series, seriesIndex, w }: any) {
       const total = series.reduce((a: number, b: number) => a + b, 0);
       const value = series[seriesIndex];
       const percent = ((value / total) * 100).toFixed(1);

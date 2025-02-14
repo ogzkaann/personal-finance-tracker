@@ -2,7 +2,6 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useTransactionStore } from '@/stores/transaction';
-import { useCategoryStore } from '@/stores/category';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -10,7 +9,6 @@ const chartContainer = ref<HTMLCanvasElement | null>(null);
 const chart = ref<Chart | null>(null);
 
 const transactionStore = useTransactionStore();
-const categoryStore = useCategoryStore();
 
 const createChart = () => {
   if (!chartContainer.value) return;

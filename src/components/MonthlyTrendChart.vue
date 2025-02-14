@@ -123,7 +123,7 @@ const chartOptions = computed(() => ({
   },
   tooltip: {
     enabled: true,
-    custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+    custom: function({ series, dataPointIndex, w }: any) {
       const value = series[0][dataPointIndex];
       const date = w.globals.categoryLabels[dataPointIndex];
       const color = value >= 0 ? '#10B981' : '#EF4444';

@@ -22,7 +22,22 @@ const handleDelete = () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
-    <!-- Kategori içeriği -->
+  <div class="flex justify-between items-center p-4 bg-white rounded-lg shadow-sm transition-shadow hover:shadow-md">
+    <div v-if="isEditing">
+      <input
+        v-model="editedCategory.name"
+        type="text"
+        class="input"
+        @keyup.enter="handleUpdate"
+      />
+      <button @click="handleUpdate" class="ml-2 btn btn-primary">Kaydet</button>
+    </div>
+    <div v-else>
+      <span>{{ category.name }}</span>
+      <div class="flex space-x-2">
+        <button @click="isEditing = true" class="btn btn-secondary">Düzenle</button>
+        <button @click="handleDelete" class="btn btn-danger">Sil</button>
+      </div>
+    </div>
   </div>
 </template> 
