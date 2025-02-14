@@ -6,7 +6,6 @@ import { useCurrencyStore } from '../stores/currency';
 
 const { locale, t } = useI18n();
 const currencyStore = useCurrencyStore();
-console.log(locale.value);
 
 const props = defineProps<{
   transactions: Transaction[];
@@ -54,7 +53,7 @@ const handleDelete = (id: string) => {
 
 <template>
   <div class="space-y-4">
-    <div v-if="transactions.length === 0" class="text-center py-8">
+    <div v-if="transactions.length === 0" class="py-8 text-center">
       <p class="text-gray-500">Henüz hiç işlem bulunmuyor.</p>
     </div>
     
@@ -66,7 +65,7 @@ const handleDelete = (id: string) => {
       >
         <div v-for="transaction in sortedTransactions" 
              :key="transaction.id"
-             class="flex items-center p-4 bg-white hover:bg-gray-50 transition-all duration-200 rounded-lg border border-gray-200 group"
+             class="flex items-center p-4 bg-white rounded-lg border border-gray-200 transition-all duration-200 hover:bg-gray-50 group"
         >
           <div class="flex-1">
             <div class="flex items-center space-x-3">
@@ -76,14 +75,14 @@ const handleDelete = (id: string) => {
               ></div>
               <span class="font-medium text-gray-900">{{ getCategoryName(transaction.category) }}</span>
               <span v-if="transaction.isRecurring" 
-                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800">
-                <i class="fas fa-sync-alt mr-1"></i>
+                    class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded bg-primary-100 text-primary-800">
+                <i class="mr-1 fas fa-sync-alt"></i>
                 {{ t(`transactions.recurrence.types.${transaction.recurrence?.type}`) }}
               </span>
             </div>
-            <p class="text-sm text-gray-500 mt-1">{{ transaction.description }}</p>
-            <p v-if="transaction.isRecurring" class="text-xs text-gray-500 mt-1">
-              <i class="far fa-calendar-alt mr-1"></i>
+            <p class="mt-1 text-sm text-gray-500">{{ transaction.description }}</p>
+            <p v-if="transaction.isRecurring" class="mt-1 text-xs text-gray-500">
+              <i class="mr-1 far fa-calendar-alt"></i>
               {{ t('transactions.recurrence.startDate') }}: {{ formatDate(transaction.recurrence?.startDate || '') }}
               <template v-if="transaction.recurrence?.endDate">
                 <span class="mx-1">•</span>
@@ -101,12 +100,12 @@ const handleDelete = (id: string) => {
                 {{ transaction.type === 'income' ? '+' : '-' }}
                 {{ formatAmount(transaction.amount) }}
               </span>
-              <p class="text-sm text-gray-500 mt-1">{{ formatDate(transaction.date) }}</p>
+              <p class="mt-1 text-sm text-gray-500">{{ formatDate(transaction.date) }}</p>
             </div>
             
             <button 
               @click="handleDelete(transaction.id)"
-              class="p-2 text-gray-400 hover:text-red-500 rounded-full hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              class="p-2 text-gray-400 rounded-full opacity-0 transition-opacity duration-200 hover:text-red-500 hover:bg-red-50 group-hover:opacity-100"
               title="Sil"
             >
               <i class="fas fa-trash"></i>
