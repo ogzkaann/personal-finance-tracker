@@ -124,7 +124,8 @@ export default {
       savingsRate: 'Savings Rate',
       thisMonth: 'This month\'s {type}',
       currentBalance: 'Your current balance',
-      incomeExpenseRatio: 'Your income/expense ratio'
+      incomeExpenseRatio: 'Your income/expense ratio',
+      total: 'Total'
     }
   },
   dateRangePicker: {

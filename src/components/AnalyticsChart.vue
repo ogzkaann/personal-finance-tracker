@@ -1,29 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement, BarController, LineController } from 'chart.js';
+import VueApexCharts from 'vue3-apexcharts';
 import type { Transaction } from '../types';
-
-Chart.register(
-  BarController,
-  BarElement,
-  LineController,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 const props = defineProps<{
   transactions: Transaction[];
 }>();
 
 const { t, locale } = useI18n();
-const chartContainer = ref<HTMLCanvasElement | null>(null);
-const chart = ref<Chart | null>(null);
 
 const monthlyData = computed(() => {
   const months = new Map<string, { income: number; expense: number }>();
@@ -44,130 +29,122 @@ const monthlyData = computed(() => {
     }
   });
   
-  // Ayları sırala
   const sortedMonths = Array.from(months.entries()).sort((a, b) => a[0].localeCompare(b[0]));
   
   return {
-    labels: sortedMonths.map(([month]) => {
+    categories: sortedMonths.map(([month]) => {
       const [year, monthNum] = month.split('-');
-      return new Date(parseInt(year), parseInt(monthNum) - 1).toLocaleDateString(locale, { 
+      return new Date(parseInt(year), parseInt(monthNum) - 1).toLocaleDateString(locale.value, { 
         month: 'long',
         year: 'numeric'
       });
     }),
-    income: sortedMonths.map(([, data]) => data.income),
-    expense: sortedMonths.map(([, data]) => data.expense),
-    balance: sortedMonths.map(([, data]) => data.income - data.expense)
+    series: [
+      {
+        name: t('transactions.type.income'),
+        type: 'column',
+        data: sortedMonths.map(([, data]) => data.income)
+      },
+      {
+        name: t('transactions.type.expense'),
+        type: 'column',
+        data: sortedMonths.map(([, data]) => data.expense)
+      },
+      {
+        name: t('analytics.metrics.netBalance'),
+        type: 'line',
+        data: sortedMonths.map(([, data]) => data.income - data.expense)
+      }
+    ]
   };
 });
 
-const createChart = () => {
-  if (!chartContainer.value) return;
-  
-  if (chart.value) {
-    chart.value.destroy();
-  }
-
-  const ctx = chartContainer.value.getContext('2d');
-  if (!ctx) return;
-  
-  const { labels, income, expense, balance } = monthlyData.value;
-  
-  chart.value = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: t('transactions.type.income'),
-          data: income,
-          backgroundColor: '#10B981',
-          borderRadius: 4
-        },
-        {
-          label: t('transactions.type.expense'),
-          data: expense,
-          backgroundColor: '#EF4444',
-          borderRadius: 4
-        },
-        {
-          label: t('analytics.metrics.netBalance'),
-          data: balance,
-          type: 'line',
-          borderColor: '#6366F1',
-          backgroundColor: '#6366F120',
-          fill: true,
-          tension: 0.4
-        }
-      ]
+const chartOptions = computed(() => ({
+  chart: {
+    type: 'line',
+    height: 350,
+    stacked: false,
+    toolbar: {
+      show: true
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            font: {
-              family: "'Inter var', sans-serif",
-              size: 14
-            },
-            padding: 20
-          }
-        },
-        tooltip: {
-          callbacks: {
-            label: (context) => {
-              const value = context.raw as number;
-              return `${context.dataset.label}: ${value.toLocaleString(locale, { 
-                style: 'currency', 
-                currency: 'TRY' 
-              })}`;
-            }
-          }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: (value) => {
-              return (value as number).toLocaleString(locale, { 
-                style: 'currency', 
-                currency: 'TRY',
-                maximumFractionDigits: 0
-              });
-            }
-          }
-        }
+    animations: {
+      enabled: true,
+      speed: 300
+    }
+  },
+  plotOptions: {
+    bar: {
+      borderRadius: 4,
+      columnWidth: '50%'
+    }
+  },
+  stroke: {
+    width: [0, 0, 3]
+  },
+  colors: ['#10B981', '#EF4444', '#6366F1'],
+  dataLabels: {
+    enabled: false
+  },
+  grid: {
+    padding: {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
+    }
+  },
+  markers: {
+    size: 4,
+    strokeWidth: 2,
+    hover: {
+      size: 6
+    }
+  },
+  xaxis: {
+    categories: monthlyData.value.categories
+  },
+  yaxis: {
+    labels: {
+      formatter: (value: number) => {
+        return value.toLocaleString(locale.value, {
+          style: 'currency',
+          currency: 'TRY',
+          maximumFractionDigits: 0
+        });
       }
     }
-  });
-};
-
-// Chart'ı güncelle
-watch(() => [props.transactions, locale], () => {
-  if (chartContainer.value) {
-    createChart();
+  },
+  tooltip: {
+    y: {
+      formatter: (value: number) => {
+        return value.toLocaleString(locale.value, {
+          style: 'currency',
+          currency: 'TRY'
+        });
+      }
+    }
+  },
+  legend: {
+    position: 'bottom',
+    horizontalAlign: 'center',
+    offsetY: 8,
+    fontSize: '14px',
+    fontFamily: "'Inter var', sans-serif",
+    markers: {
+      width: 12,
+      height: 12,
+      radius: 12
+    }
   }
-}, { deep: true });
-
-onMounted(() => {
-  if (chartContainer.value) {
-    createChart();
-  }
-});
-
-onUnmounted(() => {
-  if (chart.value) {
-    chart.value.destroy();
-    chart.value = null;
-  }
-});
+}));
 </script>
 
 <template>
   <div class="h-96">
-    <canvas ref="chartContainer"></canvas>
+    <VueApexCharts
+      :options="chartOptions"
+      :series="monthlyData.series"
+      height="100%"
+    />
   </div>
 </template> 

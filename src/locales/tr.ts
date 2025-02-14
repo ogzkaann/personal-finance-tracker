@@ -124,7 +124,8 @@ export default {
       savingsRate: 'Tasarruf Oranı',
       thisMonth: 'Bu ayki {type}',
       currentBalance: 'Mevcut bakiyeniz',
-      incomeExpenseRatio: 'Gelir/gider oranınız'
+      incomeExpenseRatio: 'Gelir/gider oranınız',
+      total: 'Toplam'
     }
   },
   dateRangePicker: {
