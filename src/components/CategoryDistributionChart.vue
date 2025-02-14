@@ -139,12 +139,16 @@ const chartOptions = computed(() => ({
         currency: 'TRY'
       });
       const category = w.config.labels[seriesIndex];
+      const color = w.config.colors[seriesIndex];
       
       return `
-        <div class="custom-tooltip">
-          <div class="font-medium">${category}</div>
-          <div class="text-sm text-gray-600">${amount}</div>
-          <div class="text-sm font-medium text-primary-600">${percent}%</div>
+        <div class="px-3 py-2 bg-white rounded-lg border border-gray-100 shadow-lg">
+          <div class="flex gap-2 items-center mb-1">
+            <div class="w-3 h-3 rounded-full" style="background-color: ${color}"></div>
+            <div class="text-base font-semibold text-gray-900">${category}</div>
+          </div>
+          <div class="mb-1 text-lg font-bold text-gray-900">${amount}</div>
+          <div class="text-sm font-medium" style="color: ${color}">${percent}%</div>
         </div>
       `;
     }

@@ -13,21 +13,28 @@ const { t, locale } = useI18n();
 const monthlyData = computed(() => {
   const months = new Map<string, { income: number; expense: number; balance: number }>();
   
+  // Son 12 ayı oluştur
+  const today = new Date();
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    months.set(monthKey, { income: 0, expense: 0, balance: 0 });
+  }
+  
+  // İşlemleri ekle
   props.transactions.forEach(transaction => {
     const date = new Date(transaction.date);
     const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
     
-    if (!months.has(monthKey)) {
-      months.set(monthKey, { income: 0, expense: 0, balance: 0 });
-    }
-    
-    const monthData = months.get(monthKey)!;
-    if (transaction.type === 'income') {
-      monthData.income += transaction.amount;
-      monthData.balance += transaction.amount;
-    } else {
-      monthData.expense += transaction.amount;
-      monthData.balance -= transaction.amount;
+    if (months.has(monthKey)) {
+      const monthData = months.get(monthKey)!;
+      if (transaction.type === 'income') {
+        monthData.income += transaction.amount;
+        monthData.balance += transaction.amount;
+      } else {
+        monthData.expense += transaction.amount;
+        monthData.balance -= transaction.amount;
+      }
     }
   });
   
@@ -37,7 +44,7 @@ const monthlyData = computed(() => {
     categories: sortedMonths.map(([month]) => {
       const [year, monthNum] = month.split('-');
       return new Date(parseInt(year), parseInt(monthNum) - 1).toLocaleDateString(locale.value, { 
-        month: 'short',
+        month: 'long',
         year: 'numeric'
       });
     }),
@@ -115,15 +122,27 @@ const chartOptions = computed(() => ({
     }
   },
   tooltip: {
-    y: {
-      formatter: (value: number) => {
-        const color = value >= 0 ? 'text-emerald-600' : 'text-red-600';
-        const sign = value >= 0 ? '+' : '';
-        return `<span class="${color}">${sign}${value.toLocaleString(locale.value, {
-          style: 'currency',
-          currency: 'TRY'
-        })}</span>`;
-      }
+    enabled: true,
+    custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+      const value = series[0][dataPointIndex];
+      const date = w.globals.categoryLabels[dataPointIndex];
+      const color = value >= 0 ? '#10B981' : '#EF4444';
+      const sign = value >= 0 ? '+' : '';
+      const amount = value.toLocaleString(locale.value, {
+        style: 'currency',
+        currency: 'TRY'
+      });
+
+      return `
+        <div class="px-4 py-3 bg-white rounded-lg border border-gray-100 shadow-lg">
+          <div class="mb-2 text-sm font-medium text-gray-600">${date}</div>
+          <div class="flex gap-2 items-center">
+            <div class="w-2 h-2 rounded-full" style="background-color: ${color}"></div>
+            <div class="text-base font-semibold text-gray-900">${t('analytics.metrics.netBalance')}</div>
+          </div>
+          <div class="mt-1 text-lg font-bold" style="color: ${color}">${sign}${amount}</div>
+        </div>
+      `;
     }
   },
   legend: {
@@ -135,7 +154,11 @@ const chartOptions = computed(() => ({
     markers: {
       width: 12,
       height: 12,
-      radius: 12
+      radius: 12,
+      offsetX: -4
+    },
+    itemMargin: {
+      horizontal: 16
     }
   }
 }));

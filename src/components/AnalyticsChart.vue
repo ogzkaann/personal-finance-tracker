@@ -115,13 +115,66 @@ const chartOptions = computed(() => ({
     }
   },
   tooltip: {
-    y: {
-      formatter: (value: number) => {
-        return value.toLocaleString(locale.value, {
-          style: 'currency',
-          currency: 'TRY'
-        });
-      }
+    enabled: true,
+    shared: true,
+    intersect: false,
+    custom: function({ series, seriesIndex, dataPointIndex, w }: any) {
+      const date = w.globals.categoryLabels[dataPointIndex];
+      const income = series[0][dataPointIndex];
+      const expense = series[1][dataPointIndex];
+      const balance = series[2][dataPointIndex];
+      
+      const incomeFormatted = income.toLocaleString(locale.value, {
+        style: 'currency',
+        currency: 'TRY'
+      });
+      
+      const expenseFormatted = expense.toLocaleString(locale.value, {
+        style: 'currency',
+        currency: 'TRY'
+      });
+      
+      const balanceFormatted = balance.toLocaleString(locale.value, {
+        style: 'currency',
+        currency: 'TRY'
+      });
+      
+      const balanceColor = balance >= 0 ? '#10B981' : '#EF4444';
+      const balanceSign = balance >= 0 ? '+' : '';
+
+      return `
+        <div class="px-4 py-3 bg-white rounded-lg shadow-lg border border-gray-100">
+          <div class="text-sm font-medium text-gray-600 mb-3">${date}</div>
+          
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <div class="text-sm font-medium text-gray-900">${t('transactions.type.income')}</div>
+              </div>
+              <div class="text-sm font-semibold text-emerald-600">+${incomeFormatted}</div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                <div class="text-sm font-medium text-gray-900">${t('transactions.type.expense')}</div>
+              </div>
+              <div class="text-sm font-semibold text-red-600">-${expenseFormatted}</div>
+            </div>
+            
+            <div class="pt-2 mt-2 border-t border-gray-100">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-2 rounded-full" style="background-color: ${balanceColor}"></div>
+                  <div class="text-sm font-medium text-gray-900">${t('analytics.metrics.netBalance')}</div>
+                </div>
+                <div class="text-sm font-bold" style="color: ${balanceColor}">${balanceSign}${balanceFormatted}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
     }
   },
   legend: {
@@ -133,7 +186,11 @@ const chartOptions = computed(() => ({
     markers: {
       width: 12,
       height: 12,
-      radius: 12
+      radius: 12,
+      offsetX: -4
+    },
+    itemMargin: {
+      horizontal: 16
     }
   }
 }));
