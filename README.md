@@ -1,86 +1,132 @@
 # Personal Finance Tracker
 
-Modern ve kullanıcı dostu bir kişisel finans takip uygulaması.
+A modern and user-friendly personal finance tracking application built with Vue 3 and TypeScript.
 
-## Özellikler
+## Features
 
-- 💰 Gelir ve gider işlemlerini kolayca ekleyip yönetme
-- 📊 Detaylı analitik ve grafikler
-- 🏷️ Özelleştirilebilir kategoriler
-- 📱 Responsive tasarım
-- 💾 LocalStorage ile veri kalıcılığı
-- 📈 Aylık trend analizi
-- 💹 Tasarruf oranı hesaplama
+### Core Features
+- 💰 Easy transaction management (income/expense)
+- 📊 Detailed analytics and charts
+- 🏷️ Customizable categories with icons and colors
+- 📱 Responsive design for all devices
+- 💾 Data persistence with localStorage
+- 🌍 Multi-language support (English/Turkish)
+- 🔐 User authentication system (demo)
+- 📈 Monthly trend analysis
+- 💹 Savings rate calculation
 
-## Teknolojiler
+### Transaction Management
+- Add, edit, and delete transactions
+- Categorize transactions
+- Filter transactions by date range, type, and category
+- View transaction history with sorting options
+- Beautiful animations for transaction operations
+
+### Analytics
+- Monthly income/expense trends
+- Category distribution charts
+- Savings rate analysis
+- Dynamic date range filtering
+- Interactive charts with Chart.js
+
+### Categories
+- Custom category management
+- Color and icon selection
+- Income/Expense category separation
+- Category-based filtering
+- Category-based analytics
+
+### User Experience
+- Clean and intuitive interface
+- Modern design with TailwindCSS
+- Smooth animations and transitions
+- Form validations and error handling
+- Loading states and feedback
+- User-specific data storage
+
+## Technologies
 
 - Vue 3 (Composition API)
 - TypeScript
 - Vite
-- Pinia
+- Pinia (State Management)
 - Vue Router
 - TailwindCSS
 - Chart.js
+- Vue I18n
 - Vitest
 
-## Kurulum
+## Getting Started
 
 ```bash
-# Bağımlılıkları yükle
+# Install dependencies
 npm install
 
-# Geliştirme sunucusunu başlat
+# Start development server
 npm run dev
 
-# Uygulamayı derle
+# Build for production
 npm run build
 
-# Testleri çalıştır
+# Run tests
 npm run test
 ```
 
-## Proje Yapısı
+## Project Structure
 
 ```
 src/
-├── assets/        # Statik dosyalar
-├── components/    # Vue bileşenleri
-├── composables/   # Composable fonksiyonlar
-├── router/        # Vue Router yapılandırması
-├── stores/        # Pinia store'ları
-├── types/         # TypeScript tipleri
-├── utils/         # Yardımcı fonksiyonlar
-└── views/         # Sayfa bileşenleri
+├── assets/        # Static assets and global styles
+├── components/    # Reusable Vue components
+├── stores/        # Pinia stores for state management
+├── views/         # Page components
+├── router/        # Vue Router configuration
+├── types/         # TypeScript type definitions
+├── locales/       # i18n translation files
+└── i18n/          # i18n configuration
 ```
 
-## Geliştirme Kılavuzu
+## Development Guidelines
 
-### Bileşen Yapısı
+### Component Structure
+- All components use TypeScript and Composition API
+- Props and emits are typed using TypeScript interfaces
+- Components follow single responsibility principle
+- Reusable components are modular and well-documented
 
-- Tüm bileşenler TypeScript ve Composition API kullanır
-- Props ve emit tanımları için TypeScript type/interface kullanılır
-- Bileşenler mümkün olduğunca küçük ve tek sorumlu olmalıdır
+### State Management
+- Global state handled by Pinia stores
+- LocalStorage synchronization in stores
+- TypeScript types for all state properties
+- Computed properties for derived state
 
-### State Yönetimi
+### Styling Guide
+- TailwindCSS utility-first approach
+- Custom CSS only when necessary
+- Consistent color palette and spacing
+- Responsive design using TailwindCSS breakpoints
 
-- Global state için Pinia store'ları kullanılır
-- LocalStorage senkronizasyonu store'larda yapılır
-- Computed property'ler için TypeScript tip tanımları yapılır
+### Testing Strategy
+- Unit tests with Vitest
+- Component testing with Vue Test Utils
+- Critical business logic coverage
+- Isolated store and utility testing
 
-### Stil Kılavuzu
+### Code Quality
+- ESLint and Prettier for code formatting
+- TypeScript for type safety
+- Clean Code principles
+- Modular and reusable code structures
+- Security best practices
+- Performance optimization
 
-- TailwindCSS utility-first yaklaşımı
-- Özel CSS sadece gerektiğinde kullanılır
-- Tutarlı renk paleti ve aralıklar
-- Responsive tasarım için TailwindCSS breakpoint'leri
+## Upcoming Features
+- Drag and drop chart layout in Analytics
+- AI-powered financial insights
+- Enhanced data visualization
+- Performance optimizations
+- Additional chart types and analytics
 
-### Test Stratejisi
-
-- Vitest ile birim testleri
-- Kritik iş mantığı için kapsamlı testler
-- Bileşen testleri için Vue Test Utils
-- Store ve utils için izole testler
-
-## Lisans
+## License
 
 MIT
