@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import VueApexCharts from 'vue3-apexcharts';
 import type { Transaction, Category } from '../types';
+import { useCurrencyStore } from '../stores/currency';
 
 const props = defineProps<{
   transactions: Transaction[];
@@ -10,6 +11,7 @@ const props = defineProps<{
 }>();
 
 const { t, locale } = useI18n();
+const currencyStore = useCurrencyStore();
 
 const chartData = computed(() => {
   const totals = new Map<string, number>();
@@ -81,10 +83,7 @@ const chartOptions = computed(() => ({
             color: '#1e293b',
             offsetY: 8,
             formatter: (val: number) => {
-              return val.toLocaleString(locale.value, {
-                style: 'currency',
-                currency: 'TRY'
-              });
+              return currencyStore.formatAmount(val);
             }
           },
           total: {
@@ -96,10 +95,7 @@ const chartOptions = computed(() => ({
             color: '#64748b',
             formatter: (w: any) => {
               const total = w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
-              return total.toLocaleString(locale.value, {
-                style: 'currency',
-                currency: 'TRY'
-              });
+              return currencyStore.formatAmount(total);
             }
           }
         }
@@ -121,10 +117,7 @@ const chartOptions = computed(() => ({
       const total = opts.w.globals.seriesTotals.reduce((a: number, b: number) => a + b, 0);
       const value = opts.w.globals.series[opts.seriesIndex];
       const percent = ((value / total) * 100).toFixed(1);
-      const amount = value.toLocaleString(locale.value, {
-        style: 'currency',
-        currency: 'TRY'
-      });
+      const amount = currencyStore.formatAmount(value);
       return `${seriesName} - ${amount} (${percent}%)`;
     }
   },
@@ -134,10 +127,7 @@ const chartOptions = computed(() => ({
       const total = series.reduce((a: number, b: number) => a + b, 0);
       const value = series[seriesIndex];
       const percent = ((value / total) * 100).toFixed(1);
-      const amount = value.toLocaleString(locale.value, {
-        style: 'currency',
-        currency: 'TRY'
-      });
+      const amount = currencyStore.formatAmount(value);
       const category = w.config.labels[seriesIndex];
       const color = w.config.colors[seriesIndex];
       

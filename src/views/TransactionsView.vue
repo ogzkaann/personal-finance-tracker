@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useTransactionStore } from '../stores/transaction';
 import { useCategoryStore } from '../stores/category';
+import { useCurrencyStore } from '../stores/currency';
 import TransactionList from '../components/TransactionList.vue';
 import TransactionForm from '../components/TransactionForm.vue';
 import DateRangePicker from '../components/DateRangePicker.vue';
@@ -12,6 +13,7 @@ import type { Transaction, TransactionType, DateRange } from '../types';
 const { t } = useI18n();
 const transactionStore = useTransactionStore();
 const categoryStore = useCategoryStore();
+const currencyStore = useCurrencyStore();
 
 const showCategoryModal = ref(false);
 const showTransactionForm = ref(false);
@@ -25,6 +27,10 @@ const dateRange = ref<DateRange>({
 const totalIncome = computed(() => transactionStore.totalIncome);
 const totalExpense = computed(() => transactionStore.totalExpense);
 const balance = computed(() => totalIncome.value - totalExpense.value);
+
+const formatCurrency = (amount: number) => {
+  return currencyStore.formatAmount(amount);
+};
 
 const filteredTransactions = computed(() => {
   let filtered = transactionStore.transactions;
@@ -80,18 +86,18 @@ const handleDeleteTransaction = (id: string) => {
       <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
         <div class="p-4 bg-green-50 rounded-lg">
           <h3 class="text-sm font-medium text-green-800">{{ t('transactions.summary.totalIncome') }}</h3>
-          <p class="mt-2 text-2xl font-semibold text-green-600">{{ totalIncome.toFixed(2) }} ₺</p>
+          <p class="mt-2 text-2xl font-semibold text-green-600">{{ formatCurrency(totalIncome) }}</p>
         </div>
         
         <div class="p-4 bg-red-50 rounded-lg">
           <h3 class="text-sm font-medium text-red-800">{{ t('transactions.summary.totalExpense') }}</h3>
-          <p class="mt-2 text-2xl font-semibold text-red-600">{{ totalExpense.toFixed(2) }} ₺</p>
+          <p class="mt-2 text-2xl font-semibold text-red-600">{{ formatCurrency(totalExpense) }}</p>
         </div>
         
         <div class="p-4 bg-blue-50 rounded-lg">
           <h3 class="text-sm font-medium text-blue-800">{{ t('transactions.summary.balance') }}</h3>
           <p class="mt-2 text-2xl font-semibold" :class="{ 'text-green-600': balance >= 0, 'text-red-600': balance < 0 }">
-            {{ balance.toFixed(2) }} ₺
+            {{ formatCurrency(balance) }}
           </p>
         </div>
       </div>
@@ -163,9 +169,6 @@ const handleDeleteTransaction = (id: string) => {
                   {{ category.name }}
                 </option>
               </select>
-              <div class="flex absolute inset-y-0 right-0 items-center px-2 pointer-events-none">
-                <i class="text-gray-400 fas fa-chevron-down"></i>
-              </div>
             </div>
           </div>
           

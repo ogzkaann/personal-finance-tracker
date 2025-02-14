@@ -2,14 +2,21 @@
 import { RouterView, RouterLink } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from './stores/auth';
+import { useCurrencyStore } from './stores/currency';
 
 const { t } = useI18n();
 const router = useRouter();
 const authStore = useAuthStore();
+const currencyStore = useCurrencyStore();
 const isUserMenuOpen = ref(false);
+
+// Para birimi ayarlarını başlat
+onMounted(() => {
+  currencyStore.initializeCurrency();
+});
 
 async function handleLogout() {
   authStore.logout();
@@ -25,7 +32,19 @@ async function handleLogout() {
         <div class="flex justify-between h-16">
           <div class="flex">
             <div class="flex-shrink-0 flex items-center">
-              <h1 class="text-xl font-bold text-indigo-600">Personal Finance Tracker</h1>
+              <div class="flex items-center space-x-2">
+                <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 shadow-lg">
+                  <i class="fas fa-wallet text-xl text-white"></i>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-800">
+                    {{ t('app.title.main') }}
+                  </span>
+                  <span class="text-xs text-gray-500 font-medium">
+                    {{ t('app.title.sub') }}
+                  </span>
+                </div>
+              </div>
             </div>
             <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
               <router-link

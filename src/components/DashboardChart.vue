@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useTransactionStore } from '@/stores/transaction';
+import { useCurrencyStore } from '@/stores/currency';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -9,6 +10,7 @@ const chartContainer = ref<HTMLCanvasElement | null>(null);
 const chart = ref<Chart | null>(null);
 
 const transactionStore = useTransactionStore();
+const currencyStore = useCurrencyStore();
 
 const createChart = () => {
   if (!chartContainer.value) return;
@@ -56,10 +58,7 @@ const createChart = () => {
           callbacks: {
             label: (context) => {
               const value = context.raw as number;
-              return `${context.label}: ${value.toLocaleString('tr-TR', { 
-                style: 'currency', 
-                currency: 'TRY' 
-              })}`;
+              return `${context.label}: ${currencyStore.formatAmount(value)}`;
             }
           }
         }

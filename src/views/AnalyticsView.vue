@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useTransactionStore } from '../stores/transaction';
 import { useCategoryStore } from '../stores/category';
+import { useCurrencyStore } from '../stores/currency';
 import AnalyticsChart from '../components/AnalyticsChart.vue';
 import CategoryDistributionChart from '../components/CategoryDistributionChart.vue';
 import MonthlyTrendChart from '../components/MonthlyTrendChart.vue';
@@ -11,6 +12,7 @@ import type { DateRange } from '../types';
 const { t, locale } = useI18n();
 const transactionStore = useTransactionStore();
 const categoryStore = useCategoryStore();
+const currencyStore = useCurrencyStore();
 
 const dateRange = ref<DateRange>({
   startDate: new Date(new Date().getFullYear(), 0, 1).toISOString().split('T')[0],
@@ -42,6 +44,10 @@ const savingsRate = computed(() => {
   if (totalIncome.value === 0) return 0;
   return (netBalance.value / totalIncome.value) * 100;
 });
+
+const formatCurrency = (amount: number) => {
+  return currencyStore.formatAmount(amount);
+};
 </script>
 
 <template>
@@ -52,21 +58,21 @@ const savingsRate = computed(() => {
       <div class="p-6 bg-white rounded-lg shadow">
         <h3 class="mb-2 text-sm font-medium text-gray-500">{{ t('transactions.summary.totalIncome') }}</h3>
         <p class="text-2xl font-bold text-emerald-500">
-          {{ totalIncome.toLocaleString(locale, { style: 'currency', currency: 'TRY' }) }}
+          {{ formatCurrency(totalIncome) }}
         </p>
       </div>
 
       <div class="p-6 bg-white rounded-lg shadow">
         <h3 class="mb-2 text-sm font-medium text-gray-500">{{ t('transactions.summary.totalExpense') }}</h3>
         <p class="text-2xl font-bold text-red-500">
-          {{ totalExpense.toLocaleString(locale, { style: 'currency', currency: 'TRY' }) }}
+          {{ formatCurrency(totalExpense) }}
         </p>
       </div>
 
       <div class="p-6 bg-white rounded-lg shadow">
         <h3 class="mb-2 text-sm font-medium text-gray-500">{{ t('analytics.metrics.netBalance') }}</h3>
         <p class="text-2xl font-bold" :class="netBalance >= 0 ? 'text-emerald-500' : 'text-red-500'">
-          {{ netBalance.toLocaleString(locale, { style: 'currency', currency: 'TRY' }) }}
+          {{ formatCurrency(netBalance) }}
         </p>
       </div>
 

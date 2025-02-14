@@ -2,6 +2,47 @@
 
 A modern and user-friendly personal finance tracking application built with Vue 3 and TypeScript.
 
+## Approach & Architecture
+
+### Design Philosophy
+- **User-Centric Design**: Focus on intuitive navigation and clear data visualization
+- **Progressive Enhancement**: Core functionality works without JavaScript, enhanced with modern features
+- **Responsive First**: Built mobile-first with responsive design principles
+- **Performance Oriented**: Optimized bundle size and lazy loading for faster load times
+
+### Technical Decisions
+1. **Vue 3 + TypeScript**: 
+   - Composition API for better code organization and reuse
+   - TypeScript for type safety and better developer experience
+   - Vite for fast development and optimized production builds
+
+2. **State Management**:
+   - Pinia for predictable state management
+   - Local storage for data persistence
+   - User-specific data isolation
+
+3. **UI/UX Considerations**:
+   - TailwindCSS for utility-first styling
+   - Custom components for consistent design
+   - Smooth animations for better feedback
+   - Dark mode support
+   - Responsive layouts for all devices
+
+4. **Internationalization**:
+   - Vue I18n for multi-language support
+   - RTL support for Arabic and Hebrew
+   - Number and currency formatting
+
+5. **Data Visualization**:
+   - Chart.js for performance and customization
+   - Responsive charts that adapt to screen size
+   - Interactive tooltips and legends
+
+6. **Security & Privacy**:
+   - Client-side data encryption
+   - No external data transmission
+   - Secure user authentication
+
 ## Features
 
 ### Core Features

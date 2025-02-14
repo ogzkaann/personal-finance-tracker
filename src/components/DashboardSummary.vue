@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useTransactionStore } from '../stores/transaction';
+import { useCurrencyStore } from '../stores/currency';
 
 const transactionStore = useTransactionStore();
+const currencyStore = useCurrencyStore();
 
 const totalIncome = computed(() => transactionStore.totalIncome);
 const totalExpense = computed(() => transactionStore.totalExpense);
@@ -13,10 +15,7 @@ const savingsRate = computed(() => {
 });
 
 const formatCurrency = (amount: number) => {
-  return amount.toLocaleString('tr-TR', { 
-    style: 'currency', 
-    currency: 'TRY' 
-  });
+  return currencyStore.formatAmount(amount);
 };
 </script>
 

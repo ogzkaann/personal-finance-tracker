@@ -3,12 +3,14 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import VueApexCharts from 'vue3-apexcharts';
 import type { Transaction } from '../types';
+import { useCurrencyStore } from '../stores/currency';
 
 const props = defineProps<{
   transactions: Transaction[];
 }>();
 
 const { t, locale } = useI18n();
+const currencyStore = useCurrencyStore();
 
 const monthlyData = computed(() => {
   const months = new Map<string, { income: number; expense: number }>();
@@ -106,11 +108,7 @@ const chartOptions = computed(() => ({
   yaxis: {
     labels: {
       formatter: (value: number) => {
-        return value.toLocaleString(locale.value, {
-          style: 'currency',
-          currency: 'TRY',
-          maximumFractionDigits: 0
-        });
+        return currencyStore.formatAmount(value);
       }
     }
   },
@@ -124,20 +122,9 @@ const chartOptions = computed(() => ({
       const expense = series[1][dataPointIndex];
       const balance = series[2][dataPointIndex];
       
-      const incomeFormatted = income.toLocaleString(locale.value, {
-        style: 'currency',
-        currency: 'TRY'
-      });
-      
-      const expenseFormatted = expense.toLocaleString(locale.value, {
-        style: 'currency',
-        currency: 'TRY'
-      });
-      
-      const balanceFormatted = balance.toLocaleString(locale.value, {
-        style: 'currency',
-        currency: 'TRY'
-      });
+      const incomeFormatted = currencyStore.formatAmount(income);
+      const expenseFormatted = currencyStore.formatAmount(expense);
+      const balanceFormatted = currencyStore.formatAmount(balance);
       
       const balanceColor = balance >= 0 ? '#10B981' : '#EF4444';
       const balanceSign = balance >= 0 ? '+' : '';

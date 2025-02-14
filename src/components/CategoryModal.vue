@@ -320,7 +320,10 @@ const openNewCategoryForm = (type: TransactionType) => {
         <div class="px-6 py-4 bg-white border-b">
           <div class="flex justify-between items-center">
             <h3 class="text-xl font-semibold text-gray-900">
-              {{ selectedType === 'income' ? 'Yeni Gelir Kategorisi' : 'Yeni Gider Kategorisi' }}
+              {{ selectedType === 'income' 
+                ? t('categoryModal.newIncomeCategory') 
+                : t('categoryModal.newExpenseCategory') 
+              }}
             </h3>
             <button
               @click="showNewCategoryForm = false"
@@ -334,17 +337,17 @@ const openNewCategoryForm = (type: TransactionType) => {
         <div class="px-6 py-5 bg-white">
           <div class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700">Kategori Adı</label>
+              <label class="block text-sm font-medium text-gray-700">{{ t('categoryModal.fields.name') }}</label>
               <input
                 v-model="newCategory.name"
                 type="text"
                 class="block mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                placeholder="Kategori adı girin"
+                :placeholder="t('categoryModal.placeholders.name')"
               />
             </div>
 
             <div>
-              <label class="block mb-2 text-sm font-medium text-gray-700">İkon</label>
+              <label class="block mb-2 text-sm font-medium text-gray-700">{{ t('categoryModal.fields.icon') }}</label>
               <div class="grid grid-cols-6 gap-3">
                 <button
                   v-for="icon in icons"
@@ -364,7 +367,7 @@ const openNewCategoryForm = (type: TransactionType) => {
             </div>
 
             <div>
-              <label class="block mb-2 text-sm font-medium text-gray-700">Renk</label>
+              <label class="block mb-2 text-sm font-medium text-gray-700">{{ t('categoryModal.fields.color') }}</label>
               <div class="grid grid-cols-10 gap-3">
                 <button
                   v-for="color in colors"
@@ -386,7 +389,7 @@ const openNewCategoryForm = (type: TransactionType) => {
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-300 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             @click="showNewCategoryForm = false"
           >
-            İptal
+          {{ t('categoryModal.buttons.cancel') }}
           </button>
           <button
             type="button"
@@ -418,7 +421,7 @@ const openNewCategoryForm = (type: TransactionType) => {
       <div class="overflow-hidden relative text-left bg-white rounded-xl shadow-2xl transition-all transform sm:my-8 sm:w-full sm:max-w-lg">
         <div class="px-6 py-4 bg-white border-b">
           <div class="flex justify-between items-center">
-            <h3 class="text-xl font-semibold text-gray-900">Kategori Düzenle</h3>
+            <h3 class="text-xl font-semibold text-gray-900">{{ t('categoryModal.editCategory') }}</h3>
             <button
               @click="cancelEdit"
               class="p-2 text-gray-400 rounded-lg hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
@@ -431,17 +434,17 @@ const openNewCategoryForm = (type: TransactionType) => {
         <div class="px-6 py-5 bg-white">
           <div class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700">Kategori Adı</label>
+              <label class="block text-sm font-medium text-gray-700">{{ t('categoryModal.fields.name') }}</label>
               <input
                 v-model="editingCategory.name"
                 type="text"
                 class="block mt-1 w-full rounded-lg border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                placeholder="Kategori adı girin"
+                :placeholder="t('categoryModal.placeholders.name')"
               />
             </div>
 
             <div>
-              <label class="block mb-2 text-sm font-medium text-gray-700">İkon</label>
+              <label class="block mb-2 text-sm font-medium text-gray-700">{{ t('categoryModal.fields.icon') }}</label>
               <div class="grid grid-cols-6 gap-3">
                 <button
                   v-for="icon in icons"
@@ -461,7 +464,7 @@ const openNewCategoryForm = (type: TransactionType) => {
             </div>
 
             <div>
-              <label class="block mb-2 text-sm font-medium text-gray-700">Renk</label>
+              <label class="block mb-2 text-sm font-medium text-gray-700">{{ t('categoryModal.fields.color') }}</label>
               <div class="grid grid-cols-10 gap-3">
                 <button
                   v-for="color in colors"
@@ -483,14 +486,14 @@ const openNewCategoryForm = (type: TransactionType) => {
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-300 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             @click="cancelEdit"
           >
-            İptal
+          {{ t('categoryModal.buttons.cancel') }}
           </button>
           <button
             type="button"
             class="inline-flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg shadow-sm bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             @click="saveEdit"
           >
-            Kaydet
+          {{ t('categoryModal.buttons.save') }}
           </button>
         </div>
 

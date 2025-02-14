@@ -1,4 +1,5 @@
 export type TransactionType = 'income' | 'expense';
+export type RecurrenceType = 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
 
 export interface Transaction {
   id: string;
@@ -9,6 +10,14 @@ export interface Transaction {
   date: string;
   createdAt: string;
   updatedAt: string;
+  recurrence?: {
+    type: RecurrenceType;
+    startDate: string;
+    endDate?: string;
+    lastProcessed?: string;
+  };
+  isRecurring?: boolean;
+  parentTransactionId?: string;
   deleted?: boolean;
 }
 

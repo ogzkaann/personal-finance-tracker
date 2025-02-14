@@ -2,8 +2,10 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Transaction, Category } from '../types';
+import { useCurrencyStore } from '../stores/currency';
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
+const currencyStore = useCurrencyStore();
 console.log(locale.value);
 
 const props = defineProps<{
@@ -27,12 +29,8 @@ const getCategoryColor = (categoryId: string) => {
   return category ? category.color : '#94A3B8';
 };
 
-const formatAmount = (amount: number, type: 'income' | 'expense') => {
-  const formatted = amount.toLocaleString('tr-TR', { 
-    style: 'currency', 
-    currency: 'TRY' 
-  });
-  return type === 'income' ? `+${formatted}` : `-${formatted}`;
+const formatAmount = (amount: number) => {
+  return currencyStore.formatAmount(amount);
 };
 
 const formatDate = (date: string) => {
@@ -77,18 +75,32 @@ const handleDelete = (id: string) => {
                 :style="{ backgroundColor: getCategoryColor(transaction.category) }"
               ></div>
               <span class="font-medium text-gray-900">{{ getCategoryName(transaction.category) }}</span>
+              <span v-if="transaction.isRecurring" 
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800">
+                <i class="fas fa-sync-alt mr-1"></i>
+                {{ t(`transactions.recurrence.types.${transaction.recurrence?.type}`) }}
+              </span>
             </div>
             <p class="text-sm text-gray-500 mt-1">{{ transaction.description }}</p>
+            <p v-if="transaction.isRecurring" class="text-xs text-gray-500 mt-1">
+              <i class="far fa-calendar-alt mr-1"></i>
+              {{ t('transactions.recurrence.startDate') }}: {{ formatDate(transaction.recurrence?.startDate || '') }}
+              <template v-if="transaction.recurrence?.endDate">
+                <span class="mx-1">•</span>
+                {{ t('transactions.recurrence.endDate') }}: {{ formatDate(transaction.recurrence.endDate) }}
+              </template>
+            </p>
           </div>
           
           <div class="flex items-center space-x-4">
             <div class="text-right">
-              <p :class="[
-                'font-medium',
-                transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+              <span :class="[
+                transaction.type === 'income' ? 'text-green-600' : 'text-red-600',
+                'text-sm font-medium'
               ]">
-                {{ formatAmount(transaction.amount, transaction.type) }}
-              </p>
+                {{ transaction.type === 'income' ? '+' : '-' }}
+                {{ formatAmount(transaction.amount) }}
+              </span>
               <p class="text-sm text-gray-500 mt-1">{{ formatDate(transaction.date) }}</p>
             </div>
             
