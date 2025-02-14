@@ -1,0 +1,60 @@
+# .cursorrules
+
+[Genel]
+# Proje Adı: Personal Finance Tracker
+# Amaç: Kullanıcıların gelir ve gider işlemlerini kolayca ekleyip, kategorize edebileceği,
+#       özet bilgileri (toplam gelir, gider ve bakiye) dinamik hesaplamalarla görüntüleyebileceği,
+#       verileri localStorage üzerinden kalıcı hale getirebileceği ve grafiklerle analitik sunan modern bir uygulama geliştirmek.
+# Teknoloji Yığını: Vue 3, Vite, Pinia, Vue Router, Vitest, TailwindCSS, Chart.js, (mümkünse TypeScript)
+# Hedef: UX, görsellik ve modern tasarım konusunda rakipsiz bir deneyim sunmak; bu projenin case projesi olduğunu unutmayın.
+
+[Temel Gereksinimler]
+0. **Her Geliştirmede Kontrol Edilecekler:**
+   - .checks dosyasındaki gereksinimleri karşılayacak şekilde geliştirme yapılacak.
+   
+1. **İşlem Yönetimi:**
+   - Kullanıcılar yeni bir işlem ekleyebilmeli: Gelir veya gider işlemleri.
+   - Her işlem; miktar, işlem tipi (gelir/gider), kategori (ör. yiyecek, eğlence, maaş) ve tarih bilgilerini içermeli.
+   - İşlemler localStorage ile kalıcı hale getirilmeli.
+
+2. **Kategorize Etme:**
+   - İşlemler, ilgili kategorilere göre ayrılmalı ve bu kategoriler üzerinden filtreleme yapılabilmeli.
+
+3. **Özet Bilgiler:**
+   - Toplam gelir, toplam gider ve bakiye bilgileri dinamik (computed properties) olarak hesaplanmalı ve gösterilmeli.
+
+4. **Sayfa Yapısı (Vue Router):**
+   - **İşlem Listesi Sayfası:** Tüm işlemlerin listelendiği, ekleme/düzenleme/silme işlemlerinin yapıldığı ana ekran.
+   - **Analitik/Grafik Sayfası:** Chart.js (veya alternatif) kullanılarak gelir ve gider grafiklerinin gösterildiği ekran.
+   - (Bonus: Giriş/Authentication ekranı eklenebilir.)
+
+5. **State Yönetimi:**
+   - Global state yönetimi için Pinia (veya Vuex) kullanılmalı.
+
+6. **Testler:**
+   - Vitest ile temel fonksiyonlar ve komponentlerin birim testleri yazılmalı.
+
+[UX & Görsellik]
+- **Modern ve Temiz Tasarım:** 
+  - Minimalist ve profesyonel bir arayüz; kullanıcı dostu menüler, formlar ve liste düzenleri.
+  - Renk paleti, güven verici ve profesyonel tonlar (ör. mavi, yeşil, beyaz ve gri tonlar) kullanılmalı.
+- **Responsive Tasarım:**
+  - Mobil, tablet ve masaüstü cihazlarda sorunsuz çalışacak esnek ve responsive tasarım.
+- **Animasyonlar & Etkileşim:**
+  - İşlem ekleme, düzenleme veya silme gibi etkileşimlerde hoş animasyonlar ve geçiş efektleri kullanılmalı.
+  - Hover, tıklama ve form geçişlerinde mikro animasyonlara önem verilmeli.
+- **Kullanılabilirlik:**
+  - Kullanıcıların işlemleri kolayca ekleyebileceği, filtreleyebileceği ve analiz edebileceği sezgisel bir arayüz.
+  - Form doğrulama, hata mesajları ve kullanıcı bilgilendirmeleri net olmalı.
+
+[Teknik Detaylar ve Ek Özellikler]
+- **TypeScript:** Projeye tip güvenliği katmak için (mümkünse) TypeScript kullanılmalı.
+- **Tarih Filtresi:** Kullanıcılar, belirli zaman aralıklarındaki işlemleri görüntüleyebilmeli.
+- **Kod Standartları:**
+  - Kod temiz, modüler, okunabilir ve iyi yorumlanmış olmalı.
+  - Dosya yapısı ve commit mesajları düzenli ve açıklayıcı olmalı.
+- **README Dosyası:**
+  - Projenin kurulumu, kullanılan teknolojiler, mimari yapı ve geliştirme süreci hakkında detaylı bilgi içermeli.
+  
+[Final Prompt]
+"Lütfen yukarıdaki gereksinimler doğrultusunda eksiksiz, modern, kullanıcı dostu ve görsel olarak zengin bir 'Personal Finance Tracker' uygulaması geliştirin. Projeyi Vue 3, Vite, Pinia, Vue Router, Vitest, TailwindCSS, Chart.js ve (mümkünse) TypeScript kullanarak oluşturun. Uygulama, kullanıcıların gelir ve gider işlemlerini ekleyip takip edebileceği, özet bilgileri dinamik olarak hesaplayabileceği, işlemleri localStorage üzerinden kalıcı hale getireceği ve modern, responsive, animasyonlu bir UI/UX sunacaktır. Lütfen README dosyasında projenin kurulumu, mimarisi ve geliştirme süreci hakkında detaylı bilgi verin ve kodunuzu temiz, modüler bir şekilde organize edin."
